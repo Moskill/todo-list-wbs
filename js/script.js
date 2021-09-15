@@ -3,27 +3,27 @@ const taskList = document.getElementById('task-list');
 const taskBtn = document.getElementById('btn_add');
 const clearStorage = document.getElementById('clearStorage');
 const getCached = document.getElementById('getCached');
-const btnComp = document.getElementById('btn-comp');
-const btnUnComp = document.getElementById('btn-unComp');
+// const btnComp = document.getElementById('btn-comp');
+// const btnUnComp = document.getElementById('btn-unComp');
 
 // 3 Buttons for edit, delete, and check/mark
 const delBtn = '<i class="fas fa-minus-square" style="float:right" id="btn_del" onclick="deleteTask(this)"></i>';
 const editBtn = '<i class="fas fa-pen-square" style="float:right" id="btn_edit" onclick="editTask(this)"></i>'
 const checkBtn = '<i class="fas fa-check-square" style="float:right" id="btn_check" onclick="checkTask(this)"></i>'
 
-// Function to sort the listed items
-const filterComp = (e) => {
-    const tasks = taskList.childNodes;
-    tasks.forEach((task) => {
-        console.log(task.classList)
-        if (task.classList) {
-            console.log('Yo!');
-        } else console.log('No!');
-    })
-}
+// // Function to sort the listed items
+// const filterComp = () => {
+//     const tasks = taskList.childNodes;
+//     tasks.forEach((task) => {
+//         console.log(task.classList)
+//         if (task.classList) {
+//             console.log('Yo!');
+//         } else console.log('No!');
+//     })
+// }
 
-// Eventlistener for filter button
-btnComp.addEventListener('click', filterComp);
+// // Eventlistener for filter button
+// btnComp.addEventListener('click', filterComp);
 
 // Function to clear the saved items in local storage
 clearStorage.addEventListener('click', () => {
@@ -37,12 +37,10 @@ const addTask = (e = null, eingabe = null) => {
     const taskText = document.createElement('p');
     todoDiv.classList.add('alert');
     todoDiv.classList.add('alert-primary');
-    console.log(taskInput.value);
 
     if (taskInput.value) {
         taskText.innerText = taskInput.value;
     } else if (eingabe) {
-        console.log(eingabe);
         taskText.innerText = eingabe;
     } else return;
 
@@ -52,17 +50,18 @@ const addTask = (e = null, eingabe = null) => {
     todoDiv.appendChild(taskText);
     // Add items to local storage and output them
     localStorage.setItem(localStorage.length + 1, taskText.innerText);
-    console.log(localStorage);
     eingabe = null;
     e = null;
 }
+
+// Eventlistener for addTask()
+taskBtn.addEventListener('click', addTask);
 
 // Get items from storage
 const getStoredItems = () => {
     let storedItems = [];
     for (const [key, value] of Object.entries(localStorage)) {
         storedItems += value;
-        console.log(storedItems);
         addTask(null, value);
     }
 }
@@ -70,14 +69,10 @@ const getStoredItems = () => {
 //EventListener for getting items from storage
 getCached.addEventListener('click', getStoredItems);
 
-// Eventlistener for addTask()
-taskBtn.addEventListener('click', addTask);
-
 // Function for deleting itmes
 const deleteTask = (e) => {
     const task = e.parentElement;
     task.remove();
-
 }
 
 // Function for Checking tasks
@@ -96,14 +91,10 @@ const editTask = (e) => {
     const paragraph = e.parentElement.lastChild; // The value in <p>
     const task = document.createElement('input');
     task.value = e.parentElement.lastChild.innerText;
-    const editTaskValue = task.value;
     edit.append(task);
     paragraph.remove();
     task.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            console.log(editTaskValue);
-            localStorage[editTaskValue] = task.value;
-            localStorage.removeItem(editTaskValue);
             paragraph.innerText = task.value;
             edit.append(paragraph);
             task.remove();
